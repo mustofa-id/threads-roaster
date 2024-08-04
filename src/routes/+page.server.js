@@ -4,12 +4,7 @@ import puppeteer from 'puppeteer';
 
 const genAI = new GoogleGenerativeAI(env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
-const supported_langs = {
-	id: 'Indonesia',
-	ms: 'Malay',
-	en: 'English'
-};
-
+const supported_langs = { id: 'Indonesia' }; // TODO: support more languages
 const default_lang = Object.entries(supported_langs)[0];
 
 export async function load({ url }) {
@@ -25,10 +20,10 @@ export async function load({ url }) {
 				result = await roast_threads_user(username, lang);
 			} catch (error) {
 				console.error(error);
-				message = 'Cannot roast right now. Please try again later.';
+				message = 'Server error! Tidak dapat melakukan roasting sekarang';
 			}
 		} else {
-			message = 'Invalid username. Try correct it.';
+			message = 'Username tidak valid';
 		}
 	}
 
@@ -103,5 +98,6 @@ async function get_threads_user_profile(username) {
  * @returns {boolean}
  */
 function is_username_valid(username) {
+	// TODO: allow @ char
 	return /^[a-zA-Z0-9._]{1,30}$/.test(username);
 }
