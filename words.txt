@@ -1,2 +1,5 @@
 apikey
+daisyui
+sparticuz
 SUPABASE
+tailwindcss

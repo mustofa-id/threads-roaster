@@ -1,6 +1,7 @@
 import { env } from '$env/dynamic/private';
 import { GoogleGenerativeAI } from '@google/generative-ai';
-import puppeteer from 'puppeteer';
+import chromium from '@sparticuz/chromium';
+import puppeteer from 'puppeteer-core';
 import { get_roast, set_roast } from './db';
 
 export const supported_langs = { id: 'Indonesia' }; // TODO: support more languages
@@ -46,7 +47,13 @@ export async function get_threads_user_profile(username) {
 	let browser;
 	try {
 		username = username.startsWith('@') ? username : '@' + username;
-		browser = await puppeteer.launch();
+		browser = await puppeteer.launch({
+			args: chromium.args,
+			defaultViewport: chromium.defaultViewport,
+			executablePath: await chromium.executablePath(),
+			headless: chromium.headless,
+			ignoreHTTPSErrors: true
+		});
 		const page = await browser.newPage();
 		await page.goto(`https://www.threads.net/${username}`);
 		await page.waitForNetworkIdle();
