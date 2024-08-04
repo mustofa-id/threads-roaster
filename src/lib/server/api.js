@@ -1,6 +1,7 @@
+import { dev } from '$app/environment';
 import { env } from '$env/dynamic/private';
 import { GoogleGenerativeAI } from '@google/generative-ai';
-import chromium from '@sparticuz/chromium';
+import chromium from '@sparticuz/chromium-min';
 import puppeteer from 'puppeteer-core';
 import { get_roast, set_roast } from './db';
 
@@ -50,9 +51,9 @@ export async function get_threads_user_profile(username) {
 		browser = await puppeteer.launch({
 			args: chromium.args,
 			defaultViewport: chromium.defaultViewport,
-			executablePath: await chromium.executablePath(),
-			headless: chromium.headless,
-			ignoreHTTPSErrors: true
+			executablePath: dev
+				? env.CHROMIUM_LOCAL_PATH
+				: await chromium.executablePath(env.CHROMIUM_DOWNLOAD_URL)
 		});
 		const page = await browser.newPage();
 		await page.goto(`https://www.threads.net/${username}`);
