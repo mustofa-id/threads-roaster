@@ -35,7 +35,7 @@ export async function roast_threads_user(username, lang) {
 
 	const result = await model.generateContent(prompt);
 	const text = result.response.text();
-	set_roast({ username, lang, result: text });
+	await set_roast({ username, lang, result: text });
 	return text;
 }
 
