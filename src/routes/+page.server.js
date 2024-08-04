@@ -16,7 +16,7 @@ export async function load({ url }) {
 			try {
 				result = await roast_threads_user(username, lang);
 			} catch (error) {
-				console.error(error);
+				console.error({ username, lang, error });
 				message = 'Server error! Tidak dapat melakukan roasting sekarang';
 			}
 		} else {

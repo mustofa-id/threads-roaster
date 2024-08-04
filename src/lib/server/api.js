@@ -30,10 +30,11 @@ export async function roast_threads_user(username, lang) {
 	if (!content) throw new Error(`Failed to retrieve Threads user information`);
 
 	const prompt =
+		`Kamu adalah seorang Comica yang mahir dalam StandUp Comedy dan kamu pandai melakukan roasting. ` +
 		`Gunakan bahasa ${supported_langs[lang] || default_lang[1]}, berikan roasting singkat ` +
-		`dengan kejam dan menyindir dalam bahasa gaul untuk profile ` +
-		`Threads berikut: ${username}. Berikut detail dan ` +
-		`beberapa thread-nya: ${content}`;
+		`dengan kejam dan menyindir dalam bahasa gaul untuk profile Threads berikut: ${username}. ` +
+		`Berikut detail dan beberapa thread-nya: ${content}. Ingat untuk tetap singkat dan padat dan ` +
+		`juga hanya gunakan plain text tanpa format khusus penulisan`;
 
 	const result = await model.generateContent(prompt);
 	const text = result.response.text();
