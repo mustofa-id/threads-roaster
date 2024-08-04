@@ -7,6 +7,7 @@
 	export let data;
 
 	$: loading = !!$navigating;
+	$: excerpt = data.result.slice(0, 73);
 
 	const app = {
 		title: 'Threads Roaster',
@@ -18,9 +19,9 @@
 
 	function get_og_url() {
 		const params = new URLSearchParams({
-			title: data.result.slice(0, 73) || app.description,
+			title: excerpt || app.description,
 			author: data.setup.username ? `@${data.setup.username}` : '',
-			websiteUrl: 'https://threads-roaster.vercel.app',
+			websiteUrl: $page.url.origin,
 			theme: 'Github'
 		});
 		return `https://dynamic-og-image-generator.vercel.app/api/generate?${params}`;
@@ -29,7 +30,7 @@
 
 <svelte:head>
 	<title>{data.setup.username ? `${data.setup.username} - ` : ''}{app.title}</title>
-	<meta name="description" content={app.description} />
+	<meta name="description" content={excerpt || app.description} />
 	<meta property="og:image" content={get_og_url()} />
 </svelte:head>
 

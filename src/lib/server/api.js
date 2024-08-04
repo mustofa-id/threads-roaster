@@ -19,6 +19,8 @@ const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
  * @returns {Promise<string>}
  */
 export async function roast_threads_user(username, lang) {
+	username = username.toLocaleLowerCase();
+
 	const cached = await get_roast(username, lang);
 	if (cached?.result) return cached.result;
 
