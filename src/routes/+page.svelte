@@ -1,5 +1,5 @@
 <script>
-	import { navigating } from '$app/stores';
+	import { navigating, page } from '$app/stores';
 	import FireIcon from '$lib/icon/fire.svg?raw';
 	import ShareIcon from '$lib/icon/share.svg?raw';
 	import WarnIcon from '$lib/icon/warn.svg?raw';
@@ -87,11 +87,13 @@
 
 	<article class="card mt-3 bg-base-200">
 		<section class="card-body">
-			<p class="card-title">@{data.setup.username}</p>
-			<hr class="my-1 border-neutral-400 dark:border-neutral-600" />
+			{#if data.setup.username}
+				<p class="card-title">@{data.setup.username}</p>
+				<hr class="my-1 border-neutral-400 dark:border-neutral-600" />
+			{/if}
 
 			{#if data.result}
-				{@const share_uri = encodeURIComponent(window.location.href)}
+				{@const share_uri = encodeURIComponent($page.url.href)}
 				<p class="text-center text-lg sm:text-xl">{data.result}</p>
 
 				<div class="card-actions justify-end">
