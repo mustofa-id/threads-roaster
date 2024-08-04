@@ -94,7 +94,9 @@
 			{/if}
 
 			{#if data.result}
-				{@const share_uri = encodeURIComponent($page.url.href)}
+				{@const share_uri = encodeURIComponent(
+					$page.url.origin + `?u=${data.setup.username}&l=${data.setup.lang}`
+				)}
 				<p class="text-center text-lg sm:text-xl">{data.result}</p>
 
 				<div class="card-actions justify-end">

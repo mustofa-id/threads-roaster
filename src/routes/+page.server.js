@@ -2,10 +2,14 @@ import { default_lang, roast_threads_user, supported_langs } from '$lib/server/a
 
 export async function load({ url }) {
 	const username = url.searchParams.get('u');
-	const lang = /** @type {keyof supported_langs} */ (url.searchParams.get('l') || default_lang[0]);
 
+	let lang = /** @type {keyof supported_langs} */ (url.searchParams.get('l') || default_lang[0]);
 	let message = '';
 	let result = '';
+
+	if (!Object.keys(supported_langs).includes(lang)) {
+		lang = default_lang[0];
+	}
 
 	if (username) {
 		if (is_username_valid(username)) {

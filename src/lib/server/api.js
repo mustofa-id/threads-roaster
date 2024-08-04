@@ -6,7 +6,9 @@ import puppeteer from 'puppeteer-core';
 import { get_roast, set_roast } from './db';
 
 export const supported_langs = { id: 'Indonesia' }; // TODO: support more languages
-export const default_lang = Object.entries(supported_langs)[0];
+export const default_lang = /** @type {[keyof supported_langs, string]} */ (
+	Object.entries(supported_langs)[0]
+);
 
 const genAI = new GoogleGenerativeAI(env.GEMINI_API_KEY);
 const model = genAI.getGenerativeModel({ model: 'gemini-1.5-flash' });
