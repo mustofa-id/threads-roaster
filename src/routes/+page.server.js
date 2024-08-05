@@ -1,4 +1,5 @@
 import { default_lang, roast_threads_user, supported_langs } from '$lib/server/api.js';
+import { isHttpError } from '@sveltejs/kit';
 
 export async function load({ url }) {
 	const username = url.searchParams.get('u');
@@ -17,7 +18,9 @@ export async function load({ url }) {
 				result = await roast_threads_user(username, lang);
 			} catch (error) {
 				console.error({ username, lang, error });
-				message = 'Server error! Tidak dapat melakukan roasting sekarang';
+				message = isHttpError(error)
+					? error.body?.message || 'Error tidak dikenal'
+					: 'Server error! Tidak dapat melakukan roasting sekarang';
 			}
 		} else {
 			message = 'Username tidak valid';

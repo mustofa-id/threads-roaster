@@ -11,7 +11,7 @@
 
 	const app = {
 		title: 'Threads Roaster',
-		description: `Roasting pedas akun Threads berdasarkan thread-nya 🌶`,
+		description: `Beri kritik atau sindiran tajam dengan nada humoris ke akun Threads`,
 		issues_url: 'https://github.com/mustofa-id/threads-roaster/issues',
 		repo_url: 'https://github.com/mustofa-id/threads-roaster',
 		my_threads: `@habib.mustofa.id`
@@ -22,7 +22,7 @@
 			title: excerpt || app.description,
 			author: data.setup.username ? `@${data.setup.username}` : '',
 			websiteUrl: $page.url.origin,
-			theme: 'Github'
+			theme: 'github'
 		});
 		return `https://dynamic-og-image-generator.vercel.app/api/generate?${params}`;
 	}
@@ -88,7 +88,7 @@
 
 	<article class="card mt-3 bg-base-200">
 		<section class="card-body">
-			{#if data.setup.username}
+			{#if data.setup.username && !data.message}
 				<p class="card-title">@{data.setup.username}</p>
 				<hr class="my-1 border-neutral-400 dark:border-neutral-600" />
 			{/if}

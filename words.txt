@@ -1,5 +1,7 @@
 apikey
+Comica
 daisyui
+humoris
 sparticuz
 SUPABASE
 tailwindcss

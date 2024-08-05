@@ -2,6 +2,7 @@ import { dev } from '$app/environment';
 import { env } from '$env/dynamic/private';
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import chromium from '@sparticuz/chromium-min';
+import { error } from '@sveltejs/kit';
 import puppeteer from 'puppeteer-core';
 import { get_roast, set_roast } from './db';
 
@@ -26,8 +27,16 @@ export async function roast_threads_user(username, lang) {
 	const cached = await get_roast(username, lang);
 	if (cached?.result) return cached.result;
 
-	const content = await get_threads_user_profile(username);
+	const content = await get_threads_user_page(username);
 	if (!content) throw new Error(`Failed to retrieve Threads user information`);
+
+	if (/page isn't available/i.test(content)) {
+		error(404, { message: 'Akun pengguna tidak ditemukan' });
+	}
+
+	if (/profile is private/i.test(content)) {
+		error(403, { message: 'Tidak dapat melakukan roasting pada akun private' });
+	}
 
 	const prompt =
 		`Kamu adalah seorang Comica yang mahir dalam StandUp Comedy dan kamu pandai melakukan roasting. ` +
@@ -49,7 +58,7 @@ export async function roast_threads_user(username, lang) {
  * @param {string} username
  * @returns {Promise<string | null>}
  */
-export async function get_threads_user_profile(username) {
+export async function get_threads_user_page(username) {
 	let browser;
 	try {
 		username = username.startsWith('@') ? username : '@' + username;
@@ -65,14 +74,11 @@ export async function get_threads_user_profile(username) {
 		await page.waitForNetworkIdle();
 		const content = await page.evaluate(() => {
 			const layout = document.querySelector(`div#barcelona-page-layout`);
-			if (!layout) return null;
-			for (let i = 0; i < 3; i++) {
-				if (layout.lastChild) layout.removeChild(layout.lastChild);
-			}
-			return layout.textContent;
+			return layout?.textContent;
 		});
 		return (
 			content
+				?.slice(0, content?.indexOf('Log in to see more from'))
 				?.replace('threads.net', ' ')
 				?.replace(RegExp(username.slice(1), 'g'), ' ')
 				?.replace(/Like\d*Comment\d*Repost\d*Share\d*/g, '')
