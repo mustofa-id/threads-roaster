@@ -6,8 +6,9 @@ export async function load({ url }) {
 	const lang = /** @type {keyof supported_langs} */ (url.searchParams.get('l'));
 
 	if (!Object.keys(supported_langs).includes(lang)) {
-		url.searchParams.set('l', default_lang[0]);
-		redirect(307, url);
+		const target = new URL(url);
+		target.searchParams.set('l', default_lang[0]);
+		redirect(307, target);
 	}
 
 	let result = '';
